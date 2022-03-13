@@ -28,7 +28,7 @@ while bags:
     if temp_price:
         total_value-=heapq.heappop(temp_price)
     
-    if not gems:
+    elif not gems:
         break
 
 print(total_value)
