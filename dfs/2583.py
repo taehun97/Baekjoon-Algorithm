@@ -1,14 +1,13 @@
 # not solved yet
 from collections import deque
+import sys
 
+r=sys.stdin.readline
 coordinate_queue=deque()
 coordinate_x=[1, -1, 0, 0]
 coordinate_y=[0, 0, 1, -1]
 
-first_input=input()
-m=int(first_input.split(' ')[0])
-n=int(first_input.split(' ')[1])
-k=int(first_input.split(' ')[2])
+m, n, k=tuple(map(int, r().split()))
 
 cnt=0;
 grid=[[0]*n for i in range (m)]
@@ -29,17 +28,8 @@ def dfs(x, y):
                     coordinate_queue.append((nx, ny))
                     grid[nx][ny]=area[cnt-1]
 
-def sort(arr):
-    for i in range (0, len(arr)-1):
-        for j in range (i+1, len(arr)):
-            if arr[i]>arr[j]:
-                temp=arr[i]
-                arr[i]=arr[j]
-                arr[j]=temp
-
 for i in range (k):
-    coordinate_str=input()
-    coordinate_split=coordinate_str.split(' ')
+    coordinate_split=r().split()
     for x in range (int(coordinate_split[0]), int(coordinate_split[2])):
         for y in range(m-int(coordinate_split[3]), m-int(coordinate_split[1])):
             grid[y][x]=-1
