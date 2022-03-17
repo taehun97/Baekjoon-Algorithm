@@ -42,9 +42,7 @@ for i in range (len(num)):
         while i_temp>0:
             temp=multiply_matrix(temp, temp)
             i_temp-=1
-        # print(temp)
         result=multiply_matrix(temp, result)
-    print(result)
 
 for i in range (n):
     for j in range (n):
