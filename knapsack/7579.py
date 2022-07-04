@@ -22,6 +22,9 @@ for i in range (1, N+1):
             dp[i][j]=max(dp[i-1][j], memory[i]+dp[i-1][j-cost[i]])
         else: dp[i][j]=dp[i-1][j]
         
+        # row i를 탐색하는데 min_cost가 갱신되어도
+        # 이후의 row를 탐색하는데
+        # min_cost가 갱신되지 않으리라는 보장이 없다.
         if dp[i][j]>=M:
             min_cost=min(j, min_cost)
 
