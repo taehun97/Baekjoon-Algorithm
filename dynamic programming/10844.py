@@ -18,6 +18,6 @@ for i in range(n):
                 temp2[j-1]+=temp[j]
                 
         temp=copy.deepcopy(temp2)
-        #temp2 = [0 for _ in range(10)]
+        temp2 = [0 for _ in range(10)]
         
 print(sum(temp) % 1000000000)
