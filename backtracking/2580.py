@@ -1,8 +1,8 @@
 import sys
 
 input = sys.stdin.readline
-board = []
-candidates = []
+board = [list(map(int, input().split())) for _ in range(9)]
+candidates = [(i, j) for i in range(9) for j in range(9) if board[i][j]==0]
 
 isOver = False
 def dfs(x):
@@ -11,9 +11,9 @@ def dfs(x):
     if isOver: return
     
     if x==len(candidates):
-        isOver = True
         for row in board:
             print(*row)
+        isOver = True
         return
     
     else:
@@ -40,13 +40,5 @@ def isPromising(x, y):
                 num_list.remove(board[i][j])
                 
     return num_list
-            
-
-for i in range(9):
-    row = list(map(int, input().split()))
-    board.append(row)
-    for j in range(9):
-        if row[j]==0:
-            candidates.append((i, j))
 
 dfs(0)
