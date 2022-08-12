@@ -1,66 +1,72 @@
+from re import L
 import sys
+from collections import deque
 
-sys.setrecursionlimit(20000)
 input = sys.stdin.readline
 
-x, y = map(int, input().split())
-maps = []
-years = 0
-d_x = [1, -1, 0, 0]
-d_y = [0, 0, 1, -1]
-
-def dfs(v, cx, cy):
-    v[cx][cy] = 1        
-    for i in range(4):
-        nx, ny = cx + d_x[i], cy + d_y[i]
-        if 0<=nx<x and 0<=ny<y and maps[nx][ny]>0 and v[nx][ny]==0:
-            dfs(v, nx, ny)
+n, m = map(int, input().split())
+sea = [list(map(int, input().split())) for i in range(n)]
+dx = [1, -1, 0, 0]
+dy = [0, 0, 1, -1]
 
 def melt():
-    for i in range(x):
-        for j in range(y):
-            if maps[i][j]==0: continue
+    changed_ice = []
+    result = 0
+    
+    for i in range(n):
+        for j in range(m):
+            if sea[i][j]==0: continue
+            melt_size = 0
+            for d in range(4):
+                nx, ny = i + dx[d], j + dy[d]
+                if 0<=nx<n and 0<=ny<m and sea[nx][ny]==0:
+                    melt_size += 1
+            if sea[i][j]<=melt_size:
+                changed_ice.append((i, j, 0))
+            else:
+                changed_ice.append((i, j, sea[i][j]-melt_size))
             
-            water_grid = 0
-            for k in range(4):
-                nx, ny = i + d_x[k], j + d_y[k]
-                if 0<=nx<x and 0<=ny<y and isVisited[nx][ny]==0:
-                    water_grid += 1
-            
-            melting_list.append((i, j, water_grid))
+    for (x, y, size) in changed_ice:
+        sea[x][y] = size
+        result += size
         
+    return result
+
+def bfs(x, y):
+    q = deque()
+    q.append((x, y))
+    visited[x][y] = True
     
-for i in range(x):
-    row = list(map(int, input().split()))
-    maps.append(row)
-    
-chunks = 0
-year = 0
-glacier_count = 1
-    
-while chunks<2 and glacier_count>0:
-    chunks = 0
-    glacier_count = 0
-    isVisited = [[0]*y for _ in range(x)]
-    for i in range(x):
-        for j in range(y):
-            if isVisited[i][j]==0 and maps[i][j]>0:
-                glacier_count += 1
-                dfs(isVisited, i, j)
-                chunks += 1
+    while q:
+        cx, cy = q.popleft()    
+        for i in range(4):
+            nx, ny = cx + dx[i], cy + dy[i]
+            if 0<=nx<n and 0<=ny<m and sea[nx][ny]!=0 and not visited[nx][ny]:
+                q.append((nx, ny))
+                visited[nx][ny] = True
                 
-    if chunks>1: 
-        break
     
-    melting_list=[]
-    melt()
-    while melting_list:
-        a, b, area = melting_list.pop()
-        if maps[a][b]<=area:
-            maps[a][b]=0
-        else:
-            maps[a][b] -= area
-        
-    years += 1
     
-print(years)
+year = 0
+total_bulk = float('inf')
+chunk_num = 0
+
+while total_bulk!=0:
+    visited = [[False for _ in range(m)] for _ in range(n)]
+
+    for i in range(n):
+        for j in range(m):
+            if sea[i][j]!=0 and not visited[i][j]:
+                bfs(i, j)
+                chunk_num += 1    
+    
+    if chunk_num>=2:
+        print(year)
+        exit()
+    else: year += 1
+    
+    total_bulk = melt()
+    
+    chunk_num = 0
+    
+print(0)
