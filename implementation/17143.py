@@ -1,99 +1,42 @@
 import sys
-
 input = sys.stdin.readline
-
-r, c, m = map(int, input().split())
-shark_infos = [list(map(int, input().split())) for _ in range(m)]
+def shMove():
+    temp = [[0] * C for i in range(R)]
+    for i in range(R):
+        for j in range(C):
+            if g[i][j] != 0:
+                x, y, s, d, z = i, j, g[i][j][0], g[i][j][1], g[i][j][2]
+                while s > 0:
+                    x += dx[d]
+                    y += dy[d]
+                    if 0 <= x < R and 0 <= y < C:
+                        s -= 1
+                    else:
+                        x -= dx[d]
+                        y -= dy[d]
+                        if d == 0: d = 1
+                        elif d == 1: d = 0
+                        elif d == 2: d = 3
+                        elif d == 3: d = 2
+                if temp[x][y] == 0:
+                    temp[x][y] = [g[i][j][0], d, z]
+                else:
+                    if temp[x][y][2] < z:
+                        temp[x][y] = [g[i][j][0], d, z]
+    return temp
+dx = [-1, 1, 0, 0]
+dy = [0, 0, 1, -1]
+R, C, m = map(int, input().split())
+g = [[0] * C for i in range(R)]
+for i in range(1, m + 1):
+    r, c, s, d, z = map(int, input().split())
+    g[r - 1][c - 1] = [s, d - 1, z]
 result = 0
-
-def sharkMove():
-    global r, c
-    
-    for i in range(len(shark_infos)):
-        x = shark_infos[i][0]
-        y = shark_infos[i][1]
-        remaining_movement = shark_infos[i][2]
-        d = shark_infos[i][3]
-        
-        while remaining_movement!=0:
-            # print("hello")
-            if d==1:
-                if x-remaining_movement>=1:
-                    x -= remaining_movement
-                    remaining_movement = 0
-                else:
-                    remaining_movement -= (x - 1)
-                    x = 1
-                    d = 2
-            elif d==2:
-                if x+remaining_movement<=r:
-                    x += remaining_movement
-                    remaining_movement = 0
-                else:
-                    remaining_movement -= (r - x)
-                    x = r
-                    d = 1
-            elif d==3:
-                if y+remaining_movement<=c:
-                    y += remaining_movement
-                    remaining_movement = 0
-                else:
-                    remaining_movement -= (c - y)
-                    y = c
-                    d = 4    
-            elif d==4:
-                if y-remaining_movement>=1:
-                    y -= remaining_movement
-                    remaining_movement = 0
-                else:
-                    remaining_movement -= (y - 1)
-                    y = 1
-                    d = 3
-                    
-        shark_infos[i][0] = x
-        shark_infos[i][1] = y
-        shark_infos[i][3] = d
-    
-    cnt = 0
-    info_cnt = len(shark_infos)
-    while cnt<info_cnt:
-        temp = []
-        temp.append((shark_infos[cnt][4], cnt))
-        
-        cnt2 = cnt
-        while cnt2<info_cnt:
-            if shark_infos[cnt][0]==shark_infos[cnt2][0] and shark_infos[cnt][1]==shark_infos[cnt2][1]:
-                temp.append((shark_infos[cnt2][4], cnt2))
-            cnt2 += 1
-        
-        temp.sort()
-        
-        for i in range(len(temp)-1):
-            print(shark_infos[temp[i][1]])
-            shark_infos.remove(shark_infos[temp[i][1]])
-            
-        cnt += 1
-        info_cnt -= (len(temp) - 1)
-            
-        
-
-i = 0
-while i<7:
-    i += 1
-    isFished = False
-    fished_shark_idx = 0
-    fished_shark_depth = float('inf')
-    for n in range(len(shark_infos)):
-        if shark_infos[n][1]==i:
-            if shark_infos[n][0]<fished_shark_depth:
-                isFished = True
-                fished_shark_idx = n
-                fished_shark_depth = shark_infos[n][0]
-    
-    if isFished:
-        result += shark_infos[fished_shark_idx][4] 
-        shark_infos.pop(fished_shark_idx)
-    
-    sharkMove()
-    
+for i in range(C):
+    for j in range(R):
+        if g[j][i] != 0:
+            result += g[j][i][2]
+            g[j][i] = 0
+            break
+    g = shMove()
 print(result)
