@@ -14,4 +14,3 @@ for i in range(1, n):
             dp[j][x] = min(dp[j][x], dp[j][k] + dp[k+1][x] + array_info[j][0] * array_info[k][1] * array_info[x][1])
             
 print(dp[0][n-1])
-        
