@@ -19,9 +19,7 @@ for k in range(N):
         for j in range(N):
             if distance[i][j]>distance[i][k] + distance[k][j]:
                 distance[i][j] = distance[i][k] + distance[k][j]
-                
-for row in distance:
-    print(*row)
+
                 
 ans = float('inf')
 min_num = float('inf')
