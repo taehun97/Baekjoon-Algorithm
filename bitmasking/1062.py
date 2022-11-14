@@ -2,41 +2,43 @@ import sys
 
 input = sys.stdin.readline
 
-alphabet = [0 for _ in range(26)]
-BASE = 97
-
-alphabet[ord('a')-BASE] = 1
-alphabet[ord('n')-BASE] = 1
-alphabet[ord('t')-BASE] = 1
-alphabet[ord('i')-BASE] = 1
-alphabet[ord('c')-BASE] = 1
+BASE = ord('a')
 
 N, K = map(int, input().split())
-
-if K<5:
-    print(0)
-    exit()
-
 words = [list(input().rstrip()) for _ in range(N)]
-bitmasking = [[0 for _ in range(26)] for _ in range(N)]
+answer = 0
 
-for i in range(N):
-    for j in range(len(words[i])):
-        element = words[i][j]
-        if bitmasking[i][ord(element)-BASE]==0:
-            bitmasking[i][ord(element)-BASE] = 1
+def dfs(idx, cnt):
+    global answer
+    
+    if cnt==K-5:
+        count = 0
+        for word in words:
+            flag = True
+            for w in word:
+                if not check[ord(w) - BASE]:
+                    flag = False
+                    break
             
-minimum = float('inf')
-ary_list = []
+            if flag: count += 1
+            
+        answer = max(answer, count)
+        
+    for i in range(idx, 26):
+        if not check[i]:
+            check[i] = True
+            dfs(i, cnt + 1)
+            check[i] = False
 
-for i in range(N):
-    cnt = sum(bitmasking[i])
+if K<5: print(0)
+elif K==26: print(N)
+else:
+    check = [False for _ in range(26)]
     
-    if minimum>cnt:
-        minimum = cnt
-        ary_list.clear()
-        ary_list.append(i)
-    elif minimum==cnt:
-        ary_list.append(i)
-    else: pass
+    for c in ('a', 'c', 'i', 'n', 't'):
+        check[ord(c) - BASE] = True
+        
+    dfs(0, 0)
+    print(answer)
     
+        
