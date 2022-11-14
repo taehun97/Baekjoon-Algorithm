@@ -23,6 +23,7 @@ def dfs(idx, cnt):
             if flag: count += 1
             
         answer = max(answer, count)
+        return
         
     for i in range(idx, 26):
         if not check[i]:
