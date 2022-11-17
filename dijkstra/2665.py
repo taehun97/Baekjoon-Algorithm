@@ -32,8 +32,6 @@ def dijkstra(start_x, start_y):
                     distance[nx][ny] = new_distance
                     heapq.heappush(queue, (new_distance, nx, ny))
     
-    for row in distance:
-        print(*row)
     return distance[n-1][n-1]
 
 print(dijkstra(0, 0))
