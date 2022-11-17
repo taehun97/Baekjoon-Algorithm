@@ -24,7 +24,6 @@ def dijkstra(start):
     heapq.heappush(queue, (0, start))
     
     while queue:
-        print(queue)
         dist, cur_node = heapq.heappop(queue)
         
         if distance[cur_node]<dist: continue
@@ -39,6 +38,7 @@ def dijkstra(start):
     return distance, path
 
 d, p = dijkstra(start_city)
+
 print(d[end_city])
 print(len(p[end_city]))
 for c in p[end_city]:
