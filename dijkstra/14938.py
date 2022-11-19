@@ -34,16 +34,9 @@ def dijkstra(start):
 answer = 0
 for i in range(1, n+1):
     d = dijkstra(i)
-    print(d)
-    print(answer)
-    
     local_answer = 0
     for j in range(1, n+1):
-        if d[j]<=m:
-            print("ADD")
-            print(d[i], m)
-            local_answer += cost[j]
+        if d[j]<=m: local_answer += cost[j]
     
     answer = max(answer, local_answer)
-    print(answer)
 print(answer)
